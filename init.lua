@@ -85,11 +85,20 @@ local function init()
    request_battery_status();
 end
 
+local function is_charging()
+   return device_data['State'] == 1
+end
+
 -- Show notifification with extra information
 local function show_detail()
    local text = ''
-   text = text .. 'Remaining time is ' .. format_time(device_data['TimeToEmpty']) .. '\n'
-   text = text .. 'Energy is ' .. tostring(device_data['Energy']) .. '/' .. tostring(device_data['EnergyFull']) .. ' Wh\n'
+   if (is_charging()) then
+      text = text .. 'Time to full ' .. format_time(device_data['TimeToFull']) .. '\n'
+   else
+      text = text .. 'Remaining time ' .. format_time(device_data['TimeToEmpty']) .. '\n'
+   end
+
+   text = text .. 'Energy ' .. tostring(device_data['Energy']) .. '/' .. tostring(device_data['EnergyFull']) .. ' Wh\n'
    text = text .. 'Energy rate ' .. tostring(device_data['EnergyRate']) .. ' W'
    naughty.notify({
          text = text,
