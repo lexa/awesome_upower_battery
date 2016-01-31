@@ -1,6 +1,6 @@
 --------------------------------------------
--- Author: Aleksey Fedotov
--- Copyright 2015
+-- Author: Aleksey Fedotov <lexa at cfotr.com>
+-- Copyright 2016
 --------------------------------------------
 
 local setmetatable = setmetatable
