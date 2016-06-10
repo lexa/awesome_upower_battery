@@ -7,7 +7,7 @@ local setmetatable = setmetatable
 local type = type
 local capi = {
    mouse = mouse,
-   dbus = dbus,
+   dbus = dbus
 }
 local luadbus = require ('lua-dbus')
 local os = require ('os')
