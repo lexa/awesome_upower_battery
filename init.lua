@@ -67,13 +67,17 @@ end
 
 -- Get current battery status
 local function request_battery_status ()
-   luadbus.call('GetAll', update_widget, {
-                   bus = 'system',
-                   path = '/org/freedesktop/UPower/devices/DisplayDevice',
-                   interface = 'org.freedesktop.DBus.Properties',
-                   destination = 'org.freedesktop.UPower',
-                   args = { 's', 'org.freedesktop.UPower.Device' }
-   })
+   if (luadbus) then
+      luadbus.call('GetAll', update_widget, {
+                      bus = 'system',
+                      path = '/org/freedesktop/UPower/devices/DisplayDevice',
+                      interface = 'org.freedesktop.DBus.Properties',
+                      destination = 'org.freedesktop.UPower',
+                      args = { 's', 'org.freedesktop.UPower.Device' }
+      })
+   else
+      -- TODO get information about current charge by other means
+   end
 end
 
 local function init()
