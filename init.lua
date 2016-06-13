@@ -23,26 +23,26 @@ local lib = {
 local widget = wibox.widget.textbox()
 
 module('upower_battery')
-local status = {
-  [6] = 'pend. dischrg',
-  [5] = 'pend. chrg',
-  [4] = '↯',
-  [3] = '_',
-  [2] = '▼',
-  [1] = '▲',
-  [0] = '⌁'
+local status_symbols = {
+   [UP.DeviceState.PENDING_DISCHARGE] = 'pend. dischrg',
+   [UP.DeviceState.PENDING_CHARGE]    = 'pend. chrg',
+   [UP.DeviceState.FULLY_CHARGED]     = '↯',
+   [UP.DeviceState.EMPTY]             = '_',
+   [UP.DeviceState.DISCHARGING]       = '▼',
+   [UP.DeviceState.CHARGING]          = '▲',
+   [UP.DeviceState.UNKNOWN]           = '⌁'
 }
 
 local display_device;
 
 local warning_level_colors = {
-  [6] = '#FF0000',
-  [5] = '#FF0000',
-  [4] = '#F00000',
-  [3] = '#F0F000',
-  [2] = '#00F000',
-  [1] = '#F0F0F0',
-  [0] = '#F0F0F0'
+   [UP.DeviceLevel.LAST]        = '#FF0000',
+   [UP.DeviceLevel.ACTION]      = '#FF0000',
+   [UP.DeviceLevel.CRITICAL]    = '#F00000',
+   [UP.DeviceLevel.LOW]         = '#F0F000',
+   [UP.DeviceLevel.DISCHARGING] = '#00F000',
+   [UP.DeviceLevel.NONE]        = '#F0F0F0',
+   [UP.DeviceLevel.UNKNOWN]     = '#F0F0F0'
 }
 
 -- Returns a color according to current warning level
@@ -65,7 +65,7 @@ end
 
 local function update_widget (device)
    display_device = device
-   msg = status[device.state] .. ' ' .. device.percentage .. '%'
+   msg = status_symbols[device.state] .. ' ' .. device.percentage .. '%'
    color = get_color(device)
    widget:set_markup(lib.markup.fg.color(color, msg));
 end
