@@ -33,20 +33,25 @@ local status = {
   [0] = '⌁'
 }
 
--- Returns a color according to current charge percentage
-local function get_color(percentage, charging)
-   local color = '#F00000'
-   if charging and percentage == 100 then
-      color = beautiful.fg_normal
-   elseif percentage > 35 and percentage < 60 then
-      color = '#F0F000'
-   elseif percentage >= 40 then
-      color = '#00F000'
-   end
-   return color;
+
+local warning_level_colors = {
+  [6] = '#FF0000',
+  [5] = '#FF0000',
+  [4] = '#F00000',
+  [3] = '#F0F000',
+  [2] = '#00F000',
+  [1] = '#F0F0F0',
+  [0] = '#F0F0F0'
+}
+
+-- Returns a color according to current warning level
+--
+-- Warning level is set by upower and depends on charge level and time left to
+-- emptying a battery
+local function get_color(device)
+   return warning_level_colors[device.warning_level]
 end
 
-local device_data;
 
 -- Convert time from minutes into human readable value
 local function format_time(time_in_minutes)
