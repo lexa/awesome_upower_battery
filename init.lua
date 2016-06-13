@@ -78,7 +78,7 @@ local function init()
 end
 
 local function is_charging()
-   return display_device.state == 1
+   return display_device.state == UP.DeviceState.CHARGING
 end
 
 -- Show notifification with extra information
