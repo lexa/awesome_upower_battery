@@ -4,7 +4,6 @@
 --------------------------------------------
 
 local setmetatable = setmetatable
-local type = type
 local capi = {
    mouse = mouse,
 }
