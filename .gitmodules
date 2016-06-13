@@ -1,0 +1,3 @@
+[submodule "wirefu"]
+	path = wirefu
+	url = https://github.com/Elv13/wirefu.git

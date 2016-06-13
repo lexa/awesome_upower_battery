@@ -7,9 +7,9 @@ local setmetatable = setmetatable
 local type = type
 local capi = {
    mouse = mouse,
-   dbus = dbus
 }
-local luadbus = require ('lua-dbus')
+local lgi = require 'lgi'
+local UP = lgi.require('UPowerGlib')
 local os = require ('os')
 local pairs = pairs
 local tostring = tostring
@@ -57,53 +57,35 @@ local function format_time(time_in_minutes)
    end
 end
 
---DisplayDevice require upower 0.99
 local function update_widget (device)
    device_data = device
-   msg = status[device['State']] .. ' ' .. device['Percentage'] .. '%'
-   color = get_color(device['Percentage'], device['State'] == 4)
+   msg = status[device.state] .. ' ' .. device.percentage .. '%'
+   color = get_color(device.percentage, device.state == 4)
    widget:set_markup(lib.markup.fg.color(color, msg));
 end
 
--- Get current battery status
-local function request_battery_status ()
-   if (luadbus) then
-      luadbus.call('GetAll', update_widget, {
-                      bus = 'system',
-                      path = '/org/freedesktop/UPower/devices/DisplayDevice',
-                      interface = 'org.freedesktop.DBus.Properties',
-                      destination = 'org.freedesktop.UPower',
-                      args = { 's', 'org.freedesktop.UPower.Device' }
-      })
-   else
-      -- TODO get information about current charge by other means
-   end
-end
-
 local function init()
-   capi.dbus.add_match('system',
-                       "type='signal',interface='org.freedesktop.DBus.Properties',path='/org/freedesktop/UPower/devices/DisplayDevice'")
-   capi.dbus.connect_signal('org.freedesktop.DBus.Properties',
-                            function (_, _, rest) update_widget(rest) end)
-
-   request_battery_status();
+   client=UP.Client()
+   display_device=client:get_display_device()
+   update_widget(display_device)
+   display_device.on_notify = update_widget
 end
 
 local function is_charging()
-   return device_data['State'] == 1
+   return device_data.state == 1
 end
 
 -- Show notifification with extra information
 local function show_detail()
    local text = ''
    if (is_charging()) then
-      text = text .. 'Time to full ' .. format_time(device_data['TimeToFull']) .. '\n'
+      text = text .. 'Time to full ' .. format_time(device_data.time_to_full) .. '\n'
    else
-      text = text .. 'Remaining time ' .. format_time(device_data['TimeToEmpty']) .. '\n'
+      text = text .. 'Remaining time ' .. format_time(device_data.time_to_empty) .. '\n'
    end
 
-   text = text .. 'Energy ' .. tostring(device_data['Energy']) .. '/' .. tostring(device_data['EnergyFull']) .. ' Wh\n'
-   text = text .. 'Energy rate ' .. tostring(device_data['EnergyRate']) .. ' W'
+   text = text .. 'Energy ' .. tostring(device_data.energy) .. '/' .. tostring(device_data.energy_full) .. ' Wh\n'
+   text = text .. 'Energy rate ' .. tostring(device_data.energy_rate) .. ' W'
    naughty.notify({
          text = text,
          screen = capi.mouse.screen
