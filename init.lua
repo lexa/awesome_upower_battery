@@ -33,6 +33,7 @@ local status = {
   [0] = '⌁'
 }
 
+local display_device;
 
 local warning_level_colors = {
   [6] = '#FF0000',
@@ -63,9 +64,9 @@ local function format_time(time_in_minutes)
 end
 
 local function update_widget (device)
-   device_data = device
+   display_device = device
    msg = status[device.state] .. ' ' .. device.percentage .. '%'
-   color = get_color(device.percentage, device.state == 4)
+   color = get_color(device)
    widget:set_markup(lib.markup.fg.color(color, msg));
 end
 
@@ -77,20 +78,20 @@ local function init()
 end
 
 local function is_charging()
-   return device_data.state == 1
+   return display_device.state == 1
 end
 
 -- Show notifification with extra information
 local function show_detail()
    local text = ''
    if (is_charging()) then
-      text = text .. 'Time to full ' .. format_time(device_data.time_to_full) .. '\n'
+      text = text .. 'Time to full ' .. format_time(display_device.time_to_full) .. '\n'
    else
-      text = text .. 'Remaining time ' .. format_time(device_data.time_to_empty) .. '\n'
+      text = text .. 'Remaining time ' .. format_time(display_device.time_to_empty) .. '\n'
    end
 
-   text = text .. 'Energy ' .. tostring(device_data.energy) .. '/' .. tostring(device_data.energy_full) .. ' Wh\n'
-   text = text .. 'Energy rate ' .. tostring(device_data.energy_rate) .. ' W'
+   text = text .. 'Energy ' .. tostring(display_device.energy) .. '/' .. tostring(display_device.energy_full) .. ' Wh\n'
+   text = text .. 'Energy rate ' .. tostring(display_device.energy_rate) .. ' W'
    naughty.notify({
          text = text,
          screen = capi.mouse.screen
