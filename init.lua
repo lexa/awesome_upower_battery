@@ -68,10 +68,10 @@ end
 
 -- Show notifification with extra information
 local function show_detail()
-   local text = display_device:to_text();
+   local text = display_device:to_text()
    naughty.notify({
          text = text,
-         title = "Battery status"
+         title = "Battery status",
          screen = capi.mouse.screen
    })
 end
