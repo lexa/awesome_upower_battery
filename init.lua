@@ -52,16 +52,6 @@ local function get_color(device)
    return warning_level_colors[device.warning_level]
 end
 
-
--- Convert time from minutes into human readable value
-local function format_time(time_in_minutes)
-   if (time_in_minutes > 0) then
-      return os.date('!%X', time_in_minutes)
-   else
-      return "N/A"
-   end
-end
-
 local function update_widget (device)
    display_device = device
    msg = status_symbols[device.state] .. ' ' .. device.percentage .. '%'
@@ -74,10 +64,6 @@ local function init()
    display_device=client:get_display_device()
    update_widget(display_device)
    display_device.on_notify = update_widget
-end
-
-local function is_charging()
-   return display_device.state == UP.DeviceState.CHARGING
 end
 
 -- Show notifification with extra information
