@@ -82,17 +82,10 @@ end
 
 -- Show notifification with extra information
 local function show_detail()
-   local text = ''
-   if (is_charging()) then
-      text = text .. 'Time to full ' .. format_time(display_device.time_to_full) .. '\n'
-   else
-      text = text .. 'Remaining time ' .. format_time(display_device.time_to_empty) .. '\n'
-   end
-
-   text = text .. 'Energy ' .. tostring(display_device.energy) .. '/' .. tostring(display_device.energy_full) .. ' Wh\n'
-   text = text .. 'Energy rate ' .. tostring(display_device.energy_rate) .. ' W'
+   local text = display_device:to_text();
    naughty.notify({
          text = text,
+         title = "Battery status"
          screen = capi.mouse.screen
    })
 end
