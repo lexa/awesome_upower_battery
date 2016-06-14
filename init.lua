@@ -40,8 +40,8 @@ local warning_level_colors = {
    [UP.DeviceLevel.CRITICAL]    = '#F00000',
    [UP.DeviceLevel.LOW]         = '#F0F000',
    [UP.DeviceLevel.DISCHARGING] = '#00F000',
-   [UP.DeviceLevel.NONE]        = '#F0F0F0',
-   [UP.DeviceLevel.UNKNOWN]     = '#F0F0F0'
+   [UP.DeviceLevel.NONE]        = (beautiful.fg_normal or '#F0F0F0'),
+   [UP.DeviceLevel.UNKNOWN]     = (beautiful.fg_normal or '#F0F0F0'),
 }
 
 -- Returns a color according to current warning level
