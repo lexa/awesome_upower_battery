@@ -16,9 +16,6 @@ local naughty = require ('naughty')
 local awful = require ('awful')
 local beautiful = require ('beautiful')
 local wibox = require('wibox')
-local lib = {
-   markup = require('obvious.lib.markup')
-}
 local widget = wibox.widget.textbox()
 
 module('upower_battery')
@@ -52,11 +49,15 @@ local function get_color(device)
    return warning_level_colors[device.warning_level]
 end
 
+local function format_html(text, color)
+   return "<span color='" .. color .. "'>" .. text .. "</span>"
+end
+
 local function update_widget (device)
    display_device = device
    msg = status_symbols[device.state] .. ' ' .. device.percentage .. '%'
    color = get_color(device)
-   widget:set_markup(lib.markup.fg.color(color, msg));
+   widget:set_markup(format_html(msg, color));
 end
 
 local function init()
