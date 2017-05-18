@@ -17,6 +17,7 @@ local awful = require ('awful')
 local beautiful = require ('beautiful')
 local wibox = require('wibox')
 local widget = wibox.widget.textbox()
+local math = require('math')
 
 module('upower_battery')
 local status_symbols = {
@@ -53,9 +54,13 @@ local function format_html(text, color)
    return "<span color='" .. color .. "'>" .. text .. "</span>"
 end
 
+local function round(f)
+  return math.ceil(f-0.5);
+end
+
 local function update_widget (device)
    display_device = device
-   msg = status_symbols[device.state] .. ' ' .. device.percentage .. '%'
+   msg = status_symbols[device.state] .. ' ' .. round(device.percentage) .. '%'
    color = get_color(device)
    widget:set_markup(format_html(msg, color));
 end
