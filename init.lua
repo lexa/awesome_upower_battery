@@ -7,7 +7,7 @@ local setmetatable = setmetatable
 local capi = {
    mouse = mouse,
 }
-local lgi = require 'lgi'
+local lgi = require ('lgi')
 local UP = lgi.require('UPowerGlib')
 local os = require ('os')
 local pairs = pairs
