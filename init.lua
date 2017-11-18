@@ -61,7 +61,7 @@ local function update_widget (device)
 end
 
 local function init()
-   client=UP.Client()
+   client=UP.Client:new()
    display_device=client:get_display_device()
    update_widget(display_device)
    display_device.on_notify = update_widget
