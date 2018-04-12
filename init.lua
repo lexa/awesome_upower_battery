@@ -9,9 +9,6 @@ local capi = {
 }
 local lgi = require ('lgi')
 local UP = lgi.require('UPowerGlib')
-local os = require ('os')
-local pairs = pairs
-local tostring = tostring
 local naughty = require ('naughty')
 local awful = require ('awful')
 local beautiful = require ('beautiful')
