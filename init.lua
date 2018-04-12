@@ -74,13 +74,13 @@ local function init()
 end
 
 -- Show notifification with extra information
-local function show_detail()
-   local text = display_device:to_text()
-   naughty.notify({
-         text = text,
-         title = "Battery status",
-         screen = capi.mouse.screen
-   })
+local function show_detail(device)
+  local text = device:to_text()
+  naughty.notify({
+      text = text,
+      title = "Battery status",
+      screen = capi.mouse.screen
+  })
 end
 
 widget:buttons(awful.util.table.join(
