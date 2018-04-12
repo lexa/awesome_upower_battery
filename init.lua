@@ -19,7 +19,8 @@ local wibox = require('wibox')
 local widget = wibox.widget.textbox()
 local math = require('math')
 
-module('upower_battery')
+local upower_battery = { mt = {} };
+
 local status_symbols = {
    [UP.DeviceState.PENDING_DISCHARGE] = 'pend. dischrg',
    [UP.DeviceState.PENDING_CHARGE]    = 'pend. chrg',
@@ -66,7 +67,7 @@ local function update_widget (device)
 end
 
 local function init()
-   client=UP.Client:new()
+   local client=UP.Client:new()
    display_device=client:get_display_device()
    update_widget(display_device)
    display_device.on_notify = update_widget
@@ -86,7 +87,9 @@ widget:buttons(awful.util.table.join(
                   awful.button({ }, 1, show_detail)
 ))
 
-setmetatable(_M, { __call = function ()
-                      init()
-                      return widget
-end })
+function upower_battery.mt:__call(...)
+  init()
+  return widget
+end
+
+return setmetatable(upower_battery, upower_battery.mt)
