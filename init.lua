@@ -13,7 +13,6 @@ local naughty = require ('naughty')
 local awful = require ('awful')
 local beautiful = require ('beautiful')
 local wibox = require('wibox')
-local widget = wibox.widget.textbox()
 local math = require('math')
 
 local upower_battery = { mt = {} };
@@ -27,8 +26,6 @@ local status_symbols = {
    [UP.DeviceState.CHARGING]          = '▲',
    [UP.DeviceState.UNKNOWN]           = '⌁'
 }
-
-local display_device;
 
 local warning_level_colors = {
    [UP.DeviceLevel.LAST]        = '#FF0000',
@@ -56,18 +53,10 @@ local function round(f)
   return math.ceil(f-0.5);
 end
 
-local function update_widget (device)
-   display_device = device
+local function update_widget (widget, device)
    msg = status_symbols[device.state] .. ' ' .. round(device.percentage) .. '%'
    color = get_color(device)
    widget:set_markup(format_html(msg, color));
-end
-
-local function init()
-   local client=UP.Client:new()
-   display_device=client:get_display_device()
-   update_widget(display_device)
-   display_device.on_notify = update_widget
 end
 
 -- Show notifification with extra information
@@ -80,13 +69,24 @@ local function show_detail(device)
   })
 end
 
-widget:buttons(awful.util.table.join(
-                  awful.button({ }, 1, show_detail)
-))
+local function new()
+   local widget = wibox.widget.textbox()
+   local client = UP.Client:new()
+   local display_device = client:get_display_device()
+
+   widget:buttons(awful.util.table.join(
+                    awful.button({ }, 1, function () show_detail(display_device) end)
+   ))
+
+   display_device.on_notify = function (device)
+     update_widget(widget, device)
+   end
+   update_widget(widget, display_device)
+   return widget
+end
 
 function upower_battery.mt:__call(...)
-  init()
-  return widget
+  return new(...)
 end
 
 return setmetatable(upower_battery, upower_battery.mt)
