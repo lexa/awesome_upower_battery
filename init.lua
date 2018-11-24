@@ -73,6 +73,18 @@ local function new()
    local widget = wibox.widget.textbox()
    local client = UP.Client:new()
    local display_device = client:get_display_device()
+   if not display_device.is_present then
+     -- try to find any other working device
+     for _, d in ipairs(client:get_devices()) do
+       if d.is_present then
+         display_device=d
+         break
+       end
+     end
+     if not display_device.is_present then
+       return
+     end
+   end
 
    widget:buttons(awful.util.table.join(
                     awful.button({ }, 1, function () show_detail(display_device) end)
