@@ -50,18 +50,20 @@ local function get_color(device)
    return warning_level_colors[device.warning_level]
 end
 
-local function format_html(text, color)
-   return "<span color='" .. color .. "'>" .. text .. "</span>"
-end
-
 local function round(f)
   return math.ceil(f-0.5);
 end
 
-local function update_widget (widget, device)
+local function update_widget(widget, device)
    msg = status_symbols[device.state] .. ' ' .. round(device.percentage) .. '%'
+   if device.time_to_empty ~= 0.0 then
+      msg = msg .. " Time to empty " .. os.date("!%X", device.time_to_empty)
+   end
+   if device.time_to_full ~= 0.0 then
+      msg = msg .. " Time to full " .. os.date("!%X", device.time_to_full)
+   end
    color = get_color(device)
-   widget:set_markup(format_html(msg, color));
+   widget:set_markup("<span color='" .. color .. "'>" .. msg .. "</span>");
 end
 
 local function get_battery_icon(icon_name)
