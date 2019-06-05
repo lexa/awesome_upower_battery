@@ -22,7 +22,7 @@ This means:
 
 ## Requirements ##
 
-- [AwesomeWM-3.5.6](https://awesomewm.org) with dbus support enabled
+- [AwesomeWM-4.2](https://awesomewm.org) with dbus and LGI support enabled
 - [upower-0.99](https://upower.freedesktop.org/)
 
 ## Installation ##
