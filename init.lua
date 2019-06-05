@@ -62,13 +62,18 @@ local function update_widget (widget, device)
    widget:set_markup(format_html(msg, color));
 end
 
+local function get_battery_icon(icon_name)
+   return icon_theme:lookup_icon(icon_name, 0, 0):get_filename()
+end
+
 -- Show notifification with extra information
 local function show_detail(device)
   local text = device:to_text()
   naughty.notify({
       text = text,
       title = "Battery status",
-      screen = capi.mouse.screen
+      screen = capi.mouse.screen,
+      icon = get_battery_icon(device.icon_name)
   })
 end
 
@@ -79,6 +84,7 @@ local function notify_on_low_battery(device)
         title = "Low Battery",
         screen = capi.mouse.screen,
         preset = naughty.config.presets.critical,
+        icon = get_battery_icon(device.icon_name)
     })
   end
 end
