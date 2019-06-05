@@ -66,27 +66,25 @@ local function get_battery_icon(icon_name)
    return icon_theme:lookup_icon(icon_name, 0, 0):get_filename()
 end
 
+local function show_notification(title, text, icon_name, preset)
+   args = {
+        title = title,
+        text = text,
+        screen = capi.mouse.screen,
+        preset = preset,
+        icon = get_battery_icon(icon_name),
+   };
+end
+
 -- Show notifification with extra information
 local function show_detail(device)
-  local text = device:to_text()
-  naughty.notify({
-      text = text,
-      title = "Battery status",
-      screen = capi.mouse.screen,
-      icon = get_battery_icon(device.icon_name)
-  })
+   show_notification("Battery status", device:to_text(), device.icon_name)
 end
 
 local function notify_on_low_battery(device)
-  if device.warning_level == UP.DeviceLevel.LOW or device.warning_level == UP.DeviceLevel.CRITICAL or device.warning_level == UP.DeviceLevel.ACTION or device.warning_level == UP.DeviceLevel.LAST then
-    naughty.notify({
-        text = "Battery level " .. round(device.percentage),
-        title = "Low Battery",
-        screen = capi.mouse.screen,
-        preset = naughty.config.presets.critical,
-        icon = get_battery_icon(device.icon_name)
-    })
-  end
+   if device.warning_level == UP.DeviceLevel.LOW or device.warning_level == UP.DeviceLevel.CRITICAL or device.warning_level == UP.DeviceLevel.ACTION or device.warning_level == UP.DeviceLevel.LAST then
+      show_notification("Low Battery", "Battery level " .. round(device.percentage), device.icon_name, naughty.config.presets.critical)
+   end
 end
 
 local function new()
