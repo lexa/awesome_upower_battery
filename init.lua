@@ -69,6 +69,17 @@ local function show_detail(device)
   })
 end
 
+local function notify_on_low_battery(device)
+  if device.warning_level == UP.DeviceLevel.LOW or device.warning_level == UP.DeviceLevel.CRITICAL or device.warning_level == UP.DeviceLevel.ACTION or device.warning_level == UP.DeviceLevel.LAST then
+    naughty.notify({
+        text = "Battery level " .. round(device.percentage),
+        title = "Low Battery",
+        screen = capi.mouse.screen,
+        bg = '#ff0000'
+    })
+  end
+end
+
 local function new()
    local widget = wibox.widget.textbox()
    local client = UP.Client:new()
@@ -92,6 +103,7 @@ local function new()
 
    display_device.on_notify = function (device)
      update_widget(widget, device)
+     notify_on_low_battery(device)
    end
    update_widget(widget, display_device)
    return widget
