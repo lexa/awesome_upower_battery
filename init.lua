@@ -12,10 +12,13 @@ local UP = lgi.require('UPowerGlib')
 local naughty = require ('naughty')
 local awful = require ('awful')
 local beautiful = require ('beautiful')
+local Gtk = lgi.require('Gtk')
 local wibox = require('wibox')
 local math = require('math')
 
 local upower_battery = { mt = {} };
+
+local icon_theme = Gtk.IconTheme.new();
 
 local status_symbols = {
    [UP.DeviceState.PENDING_DISCHARGE] = 'pend. dischrg',
@@ -75,7 +78,7 @@ local function notify_on_low_battery(device)
         text = "Battery level " .. round(device.percentage),
         title = "Low Battery",
         screen = capi.mouse.screen,
-        bg = '#ff0000'
+        preset = naughty.config.presets.critical,
     })
   end
 end
