@@ -20,6 +20,8 @@ local upower_battery = { mt = {} };
 
 local icon_theme = Gtk.IconTheme.new();
 
+local last_notification_id = nil;
+
 local status_symbols = {
    [UP.DeviceState.PENDING_DISCHARGE] = 'pend. dischrg',
    [UP.DeviceState.PENDING_CHARGE]    = 'pend. chrg',
@@ -73,7 +75,9 @@ local function show_notification(title, text, icon_name, preset)
         screen = capi.mouse.screen,
         preset = preset,
         icon = get_battery_icon(icon_name),
+        replaces_id = last_notification_id
    };
+   last_notification_id = naughty.notify(args).id
 end
 
 -- Show notifification with extra information
