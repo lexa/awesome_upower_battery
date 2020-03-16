@@ -89,7 +89,7 @@ end
 
 local function notify_on_low_battery(device)
    if device.warning_level == UP.DeviceLevel.LOW or device.warning_level == UP.DeviceLevel.CRITICAL or device.warning_level == UP.DeviceLevel.ACTION or device.warning_level == UP.DeviceLevel.LAST then
-      show_notification("Low Battery", "Battery level " .. round(device.percentage), device.icon_name, naughty.config.presets.critical)
+      show_notification("Low Battery", "Battery level " .. round(device.percentage) .. "%", device.icon_name, naughty.config.presets.critical)
    end
 end
 
